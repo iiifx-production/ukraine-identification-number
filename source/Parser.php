@@ -66,11 +66,11 @@ class Parser
     /**
      * Базовый конструктор
      *
-     * @param string|int $number
+     * @param string $number
      */
     public function __construct ( $number )
     {
-        $this->number = $number;
+        $this->number = (string) $number;
     }
 
     /**
