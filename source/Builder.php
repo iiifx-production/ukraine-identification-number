@@ -121,12 +121,12 @@ class Builder
     }
 
     /**
-     * Format: DDDDDXXXSC
+     * Format: {DDDDD}{RRR}{S}{C}
      *
-     * DDDDD - Days from 1900-01-01
-     * XXX - Any nambers
-     * S - Person sex
-     * C - Control digit
+     * {DDDDD} - Days from 1900-01-01
+     * {RRR} - Any nambers
+     * {S} - Person sex
+     * {C} - Control digit
      *
      * @return string
      */
@@ -143,7 +143,7 @@ class Builder
             $days = mt_rand( 0, $max );
         }
         $DDDDD = sprintf( '%1$05d', $days + 2 );
-        $XXX = sprintf( '%1$03d', mt_rand( 0, 999 ) );
+        $RRR = sprintf( '%1$03d', mt_rand( 0, 999 ) );
         if ( !( $sex = $this->personSex ) ) {
             $list = [ static::SEX_MALE => 0, static::SEX_FEMALE => 0 ];
             $sex = array_rand( $list );
@@ -154,7 +154,7 @@ class Builder
             $list = [ 1 => 0, 3 => 0, 5 => 0, 7 => 0, 9 => 0 ];
         }
         $S = array_rand( $list );
-        $number = "{$DDDDD}{$XXX}{$S}";
+        $number = "{$DDDDD}{$RRR}{$S}";
         $summ =
             ( $number{0} * -1 ) +
             ( $number{1} * 5 ) +
