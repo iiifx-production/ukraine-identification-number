@@ -12,7 +12,7 @@
 Используя Composer:
 
 ``` bash
-$ composer require "iiifx-production/ukraine-identification-number:0.*"
+$ composer require "iiifx-production/ukraine-identification-number:1.*"
 ```
 
 ## Использование
