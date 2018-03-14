@@ -84,6 +84,7 @@ class Parser
                 ( $this->number{6} * 10 ) +
                 ( $this->number{7} * 5 ) +
                 ( $this->number{8} * 7 );
+            $daysFromBirthday = substr( $this->number, 0, 5 );
             $this->controlDigit = ( $this->controlSumm % 11 ) % 10;
             $this->isValid = $this->controlDigit === (int) $this->number{9};
             if ( $this->isValid ) {
@@ -92,7 +93,7 @@ class Parser
                     '1900-01-01 00:00:00',
                     new DateTimeZone( 'UTC' )
                 );
-                $days = substr( $this->number, 0, 5 ) - 1;
+                $days = ((int) $daysFromBirthday > 0) ? ($daysFromBirthday - 1) : 0;
                 $this->birthDatetime = $datetime->modify( "+ {$days} days" );
             }
         }
