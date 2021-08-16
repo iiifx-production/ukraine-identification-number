@@ -75,20 +75,20 @@ class Parser
     {
         if ( preg_match( '/^\d{10}$/', $this->number ) === 1 ) {
             $this->controlSumm =
-                ( $this->number{0} * -1 ) +
-                ( $this->number{1} * 5 ) +
-                ( $this->number{2} * 7 ) +
-                ( $this->number{3} * 9 ) +
-                ( $this->number{4} * 4 ) +
-                ( $this->number{5} * 6 ) +
-                ( $this->number{6} * 10 ) +
-                ( $this->number{7} * 5 ) +
-                ( $this->number{8} * 7 );
+                ( $this->number[0] * -1 ) +
+                ( $this->number[1] * 5 ) +
+                ( $this->number[2] * 7 ) +
+                ( $this->number[3] * 9 ) +
+                ( $this->number[4] * 4 ) +
+                ( $this->number[5] * 6 ) +
+                ( $this->number[6] * 10 ) +
+                ( $this->number[7] * 5 ) +
+                ( $this->number[8] * 7 );
             $daysFromBirthday = substr( $this->number, 0, 5 );
             $this->controlDigit = ( $this->controlSumm % 11 ) % 10;
-            $this->isValid = $this->controlDigit === (int) $this->number{9};
+            $this->isValid = $this->controlDigit === (int) $this->number[9];
             if ( $this->isValid ) {
-                $this->personSex = ( $this->number{8} % 2 ) ? static::SEX_MALE : static::SEX_FEMALE;
+                $this->personSex = ( $this->number[8] % 2 ) ? static::SEX_MALE : static::SEX_FEMALE;
                 $datetime = new DateTimeImmutable(
                     '1900-01-01 00:00:00',
                     new DateTimeZone( 'UTC' )
