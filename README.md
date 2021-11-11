@@ -2,10 +2,11 @@
 
 Идентификационный номер налогоплательщика Украины. Парсер и генератор ИНН.
 
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/746be262-9725-4d22-9ce1-e7eb07dc4858/big.png)](https://insight.sensiolabs.com/projects/746be262-9725-4d22-9ce1-e7eb07dc4858)
+[comment]: <> ([![SensioLabsInsight]&#40;https://insight.sensiolabs.com/projects/746be262-9725-4d22-9ce1-e7eb07dc4858/big.png&#41;]&#40;https://insight.sensiolabs.com/projects/746be262-9725-4d22-9ce1-e7eb07dc4858&#41;)
 
-[![Latest Version on Packagist][ico-version]][link-packagist] [![Build Status][ico-travis]][link-travis]
-[![Total Downloads][ico-downloads]][link-downloads] 
+[comment]: <> ([![Latest Version on Packagist][ico-version]][link-packagist] [![Build Status][ico-travis]][link-travis])
+
+[comment]: <> ([![Total Downloads][ico-downloads]][link-downloads] )
 
 ## Алгоритм
 Номер ИНН состоит из десяти знаков
@@ -15,7 +16,7 @@ $number = "{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}"
 
 Вычисляем контрольную сумму: суммируем множители первых 9 знаков ИНН
 ```
-$summ =
+$sum =
     ( $number{0} * -1 ) +
     ( $number{1} * 5 ) +
     ( $number{2} * 7 ) +
@@ -28,7 +29,7 @@ $summ =
 ```
 Получаем контрольное число: делим контрольную сумму на 11 по модулю, потом на 10
 ```
-$digit = ( $summ % 11 ) % 10
+$digit = ( $sum % 11 ) % 10
 ```
 Если контрольное число и 10 знак в ИНН совпадает - номер правильный
 ```
@@ -46,7 +47,7 @@ $sex = ( $number{8} % 2 ) ? MALE : FEMALE
 Используя Composer:
 
 ``` bash
-$ composer require "iiifx-production/ukraine-identification-number:1.*"
+$ composer require iiifx-production/ukraine-identification-number
 ```
 
 ## Использование
@@ -60,28 +61,27 @@ use iiifx\Identification\Ukraine\Parser;
 $number = '2245134075';
 
 # Создаем парсер
-$parser = Parser::create( $number );
+$parser = Parser::create($number);
 # Или так
-$parser = new Parser( $number );
+$parser = new Parser($number);
 
 # Проверяем правильность ИНН
-if ( $parser->isValidNumber() ) {
-
-    $parser->getNumber(); # 2245134075
+if ($parser->isValidNumber()) {
+    echo $parser->getNumber(); # 2245134075
 
     # Определяем пол владельца ИНН
-    $parser->getPersonSex(); # Parser::SEX_MALE
-    $parser->isPersonMale(); # true
-    $parser->isPersonFemale(); # false
+    echo $parser->getPersonSex(); # Parser::SEX_MALE
+    echo $parser->isPersonMale(); # true
+    echo $parser->isPersonFemale(); # false
 
     # Определяем возраст и дату рождения
-    $parser->getPersonAge(); # 55
-    $parser->getPersonBirth( 'Y-m-d' ); # 1961-06-20
-    $parser->getPersonBirthDatetime()->format( 'd.m.Y H:i:s' ); # 20.06.1961 00:00:00
+    echo $parser->getPersonAge(); # 55
+    echo $parser->getPersonBirth('Y-m-d'); # 1961-06-20
+    echo $parser->getPersonBirthDatetime()->format('d.m.Y H:i:s'); # 20.06.1961 00:00:00
 
     # Контрольная сумма и число
-    $parser->getControlSumm(); # 192
-    $parser->getControlDigit(); # 5
+    echo $parser->getControlSum(); # 192
+    echo $parser->getControlDigit(); # 5
 }
 ```
 
@@ -93,24 +93,25 @@ use iiifx\Identification\Ukraine\Builder;
 # Создаем генератор
 $builder = new Builder();
 # Или вот так
-$builder = Builder::create( Builder::SEX_MALE, new DateTime( '2010-05-12' ) );
+$builder = Builder::create(Builder::SEX_MALE, new DateTime('2010-05-12'));
 
 # Указывам пол
-$builder->setPersonSex( Builder::SEX_MALE );
+$builder->setPersonSex(Builder::SEX_MALE);
 $builder->setPersonMale();
 $builder->setPersonFemale();
 
 # Указываем возраст
-$builder->setPersonAge( 55 );
-$builder->setPersonBirthDatetime( new DateTime( '1962-11-03' ) );
+$builder->setPersonAge(55);
+$builder->setPersonBirthDatetime(new DateTime('1962-11-03'));
 
 # Генерируем ИНН
-$builder->createNumber(); # 2295209520
+echo $builder->createNumber(); # 2295209520
 ```
 
 ## Тесты
+Удалены, нужно перенастраивать
 
-[![Build Status][ico-travis]][link-travis] [![Code Coverage][ico-codecoverage]][link-scrutinizer]
+[comment]: <> ([![Build Status][ico-travis]][link-travis] [![Code Coverage][ico-codecoverage]][link-scrutinizer])
 
 ## Лицензия
 
