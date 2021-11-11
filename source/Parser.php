@@ -6,6 +6,7 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
+use Exception;
 
 class Parser
 {
@@ -13,7 +14,6 @@ class Parser
      * Male
      */
     const SEX_MALE = 1;
-
     /**
      * Female
      */
@@ -23,27 +23,22 @@ class Parser
      * @var string
      */
     protected $number;
-
     /**
      * @var bool
      */
     protected $isValid;
-
     /**
      * @var int
      */
-    protected $controlSumm;
-
+    protected $controlSum;
     /**
      * @var int
      */
     protected $controlDigit;
-
     /**
      * @var int
      */
     protected $personSex;
-
     /**
      * @var DateTimeImmutable
      */
@@ -53,48 +48,61 @@ class Parser
      * @param string $number
      *
      * @return Parser
+     *
+     * @throws Exception
      */
-    public static function create ( $number )
+    public static function create($number)
     {
-        return new Parser( $number );
+        return new Parser($number);
     }
 
     /**
      * @param string $number
+     *
+     * @throws Exception
      */
-    public function __construct ( $number )
+    public function __construct($number)
     {
-        $this->number = (string) $number;
+        $this->number = (string)$number;
+
         $this->parseNumber();
     }
 
     /**
      * Parser
+     *
+     * @throws Exception
      */
-    protected function parseNumber ()
+    protected function parseNumber()
     {
-        if ( preg_match( '/^\d{10}$/', $this->number ) === 1 ) {
-            $this->controlSumm =
-                ( $this->number[0] * -1 ) +
-                ( $this->number[1] * 5 ) +
-                ( $this->number[2] * 7 ) +
-                ( $this->number[3] * 9 ) +
-                ( $this->number[4] * 4 ) +
-                ( $this->number[5] * 6 ) +
-                ( $this->number[6] * 10 ) +
-                ( $this->number[7] * 5 ) +
-                ( $this->number[8] * 7 );
-            $daysFromBirthday = substr( $this->number, 0, 5 );
-            $this->controlDigit = ( $this->controlSumm % 11 ) % 10;
-            $this->isValid = $this->controlDigit === (int) $this->number[9];
-            if ( $this->isValid ) {
-                $this->personSex = ( $this->number[8] % 2 ) ? static::SEX_MALE : static::SEX_FEMALE;
+        if (preg_match('/^\d{10}$/', $this->number) === 1) {
+            $this->controlSum =
+                ($this->number[0] * -1) +
+                ($this->number[1] * 5) +
+                ($this->number[2] * 7) +
+                ($this->number[3] * 9) +
+                ($this->number[4] * 4) +
+                ($this->number[5] * 6) +
+                ($this->number[6] * 10) +
+                ($this->number[7] * 5) +
+                ($this->number[8] * 7);
+
+            $daysFromBirthday = substr($this->number, 0, 5);
+
+            $this->controlDigit = ($this->controlSum % 11) % 10;
+            $this->isValid = $this->controlDigit === (int)$this->number[9];
+
+            if ($this->isValid) {
+                $this->personSex = ($this->number[8] % 2) ? static::SEX_MALE : static::SEX_FEMALE;
+
                 $datetime = new DateTimeImmutable(
                     '1900-01-01 00:00:00',
-                    new DateTimeZone( 'UTC' )
+                    new DateTimeZone('UTC')
                 );
-                $days = ((int) $daysFromBirthday > 0) ? ($daysFromBirthday - 1) : 0;
-                $this->birthDatetime = $datetime->modify( "+ {$days} days" );
+
+                $days = ((int)$daysFromBirthday > 0) ? ($daysFromBirthday - 1) : 0;
+
+                $this->birthDatetime = $datetime->modify("+ $days days");
             }
         }
     }
@@ -102,7 +110,7 @@ class Parser
     /**
      * @return string|null
      */
-    public function getNumber ()
+    public function getNumber()
     {
         return $this->number;
     }
@@ -110,7 +118,7 @@ class Parser
     /**
      * @return int|null
      */
-    public function getControlDigit ()
+    public function getControlDigit()
     {
         return $this->controlDigit;
     }
@@ -118,15 +126,15 @@ class Parser
     /**
      * @return int|null
      */
-    public function getControlSumm ()
+    public function getControlSum()
     {
-        return $this->controlSumm;
+        return $this->controlSum;
     }
 
     /**
      * @return bool|null
      */
-    public function isValidNumber ()
+    public function isValidNumber()
     {
         return $this->isValid;
     }
@@ -134,7 +142,7 @@ class Parser
     /**
      * @return int|null
      */
-    public function getPersonSex ()
+    public function getPersonSex()
     {
         return $this->personSex;
     }
@@ -142,7 +150,7 @@ class Parser
     /**
      * @return bool|null
      */
-    public function isPersonMale ()
+    public function isPersonMale()
     {
         return $this->getPersonSex() === static::SEX_MALE;
     }
@@ -150,7 +158,7 @@ class Parser
     /**
      * @return bool|null
      */
-    public function isPersonFemale ()
+    public function isPersonFemale()
     {
         return $this->getPersonSex() === static::SEX_FEMALE;
     }
@@ -158,7 +166,7 @@ class Parser
     /**
      * @return DateTimeImmutable|null
      */
-    public function getPersonBirthDatetime ()
+    public function getPersonBirthDatetime()
     {
         return $this->birthDatetime;
     }
@@ -168,11 +176,12 @@ class Parser
      *
      * @return string|null
      */
-    public function getPersonBirth ( $format = 'Y-m-d' )
+    public function getPersonBirth($format = 'Y-m-d')
     {
-        if ( $datetime = $this->getPersonBirthDatetime() ) {
-            return $datetime->format( $format );
+        if ($datetime = $this->getPersonBirthDatetime()) {
+            return $datetime->format($format);
         }
+
         return null;
     }
 
@@ -180,15 +189,19 @@ class Parser
      * @param DateTimeInterface|null $now
      *
      * @return int|null
+     *
+     * @throws Exception
      */
-    public function getPersonAge ( DateTimeInterface $now = null )
+    public function getPersonAge(DateTimeInterface $now = null)
     {
-        if ( $datetime = $this->getPersonBirthDatetime() ) {
-            if ( $now === null ) {
-                $now = new DateTime( 'now', new DateTimeZone( 'UTC' ) );
+        if ($datetime = $this->getPersonBirthDatetime()) {
+            if ($now === null) {
+                $now = new DateTime('now', new DateTimeZone('UTC'));
             }
-            return (int) $now->diff( $datetime )->y;
+
+            return $now->diff($datetime)->y;
         }
+
         return null;
     }
 }
