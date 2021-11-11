@@ -156,15 +156,15 @@ class Builder
         $S = array_rand( $list );
         $number = "{$DDDDD}{$RRR}{$S}";
         $summ =
-            ( $number{0} * -1 ) +
-            ( $number{1} * 5 ) +
-            ( $number{2} * 7 ) +
-            ( $number{3} * 9 ) +
-            ( $number{4} * 4 ) +
-            ( $number{5} * 6 ) +
-            ( $number{6} * 10 ) +
-            ( $number{7} * 5 ) +
-            ( $number{8} * 7 );
+            ( $number[0] * -1 ) +
+            ( $number[1] * 5 ) +
+            ( $number[2] * 7 ) +
+            ( $number[3] * 9 ) +
+            ( $number[4] * 4 ) +
+            ( $number[5] * 6 ) +
+            ( $number[6] * 10 ) +
+            ( $number[7] * 5 ) +
+            ( $number[8] * 7 );
         $C = ( $summ % 11 ) % 10;
         return "{$number}{$C}";
     }
