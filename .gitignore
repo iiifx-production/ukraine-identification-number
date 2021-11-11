@@ -3,3 +3,5 @@ code-coverage/*
 composer.phar
 composer.lock
 public/*
+
+.idea
